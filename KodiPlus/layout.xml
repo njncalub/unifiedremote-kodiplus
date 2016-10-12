@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<layout onLaunch="launch" onVolumeUp="volume_up" onVolumeDown="volume_down" scroll="none" color="#2EB0EB">
+	<tabs index="1">
+		<tab text="Info">
+			<row weight="wrap">
+				<label id="title" text="Connecting..." />
+			</row>
+			<row weight="4">
+				<image id="cover" color="#248EC3" />
+			</row>
+			<row weight="wrap">
+				<slider id="pos_slider" progress="0" progressmax="0" onup="seek" />
+			</row>
+			<row weight="wrap">
+				<button icon="previous" ontap="previous" />
+				<button icon="rwd" ontap="rewind" />
+				<button icon="playpause" ontap="play_pause" />
+				<button icon="ff" ontap="forward" />
+				<button icon="next" ontap="next" />
+			</row>
+			<row weight="wrap">
+				<button icon="vmute" ontap="volume_mute" />
+				<slider id="vol_slider" text="Volume" progress="100" progressmax="100" onchange="set_volume" weight="4" />
+			</row>
+		</tab>
+		<tab text="Remote">
+			<row>
+				<button icon="home" ontap="home" />
+				<button icon="up" ontap="up" color="#248EC3" />
+				<button image="images/info.png" ontap="info" />
+			</row>
+			<row>
+				<button icon="left" ontap="left" color="#248EC3" />
+				<button icon="select" ontap="select" color="#248EC3" />
+				<button icon="right" ontap="right" color="#248EC3" />
+			</row>
+			<row>
+				<button icon="back" ontap="back" />
+				<button icon="down" ontap="down" color="#248EC3" />
+				<button image="images/menu.png" ontap="menu" />
+			</row>
+			<row>
+				<button icon="previous" ontap="previous" />
+				<button icon="stop" ontap="stop" />
+				<button icon="next" ontap="next" />
+			</row>
+			<row>
+				<button icon="rwd" ontap="rewind" />
+				<button icon="playpause" ontap="play_pause" />
+				<button icon="ff" ontap="forward" />
+			</row>
+			<row>
+				<button image="images/subtitles.png" ontap="subtitles" />
+				<button icon="fullscreen" ontap="fullscreen" />
+				<button text="OSD" ontap="osd" />
+			</row>
+		</tab>
+	</tabs>
+</layout>

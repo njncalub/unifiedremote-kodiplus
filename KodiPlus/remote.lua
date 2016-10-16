@@ -1,5 +1,6 @@
 local tid = -1;
-local data = data;
+local data = libs.data;
+local http = libs.http;
 local log = libs.log;
 local server = libs.server;
 local timer = libs.timer;
@@ -65,7 +66,7 @@ function send(method, params)
 	-- local ok = true;
 	local json = data.tojson(req);
 	local headers = {Authorization = "Basic " .. data.tobase64(settings.username .. ":" .. settings.password)}
-	local ok, resp = pcall(libs.http.request,{
+	local ok, resp = pcall(http.request,{
 		method = "post",
 		url = url,
 		mime = "application/json",
@@ -139,8 +140,7 @@ function player()
 	if (resp == nil) then
 		print("Check your settings for Kodi. Possibly wrong port or password, username");
 	else
-		if (resp.result[1] == nil)
-			then
+		if (resp.result[1] == nil) then
 			return nil;
 		else
 			return resp.result[1].playerid;
@@ -193,7 +193,7 @@ actions.set_volume = function(vol)
 	if (vol > 100) then vol = 100; end
 	if (vol < 0) then vol = 0; end
 	send("Application.SetVolume", { volume = vol });
-	layout.vol_slider.progress = vol;
+	server.update({ id = "vol_slider", progress = vol });
 end
 
 --@help Raise volume
@@ -280,6 +280,13 @@ end
 -- Information
 ------------------------------------------------------------------------
 
+--@help Get currently playing item
+function get_current_item()
+	local resp = send("Player.GetItem", { playerid = player(), properties = { "thumbnail" } });
+	return resp.result.item;
+end
+
+--@help Get title of currently playing item
 function get_title()
 	if (player() ~= nil) then
 		return get_current_item().label;
@@ -288,18 +295,16 @@ function get_title()
 	end
 end
 
-function get_current_item()
-	local resp = send("Player.GetItem", { playerid = player(), properties = { "thumbnail" } });
-	
-	return resp.result.item;
-end
-
+--@help Tell Kodi to prepare the file for download
+--@param url:string The URL for the item to download
 function prepare_download(url)
 	local resp = send("Files.PrepareDownload", { path = url });
 	
 	return resp.result.details.path;
 end
 
+--@help Get title of currently playing item
+--@param url:string The URL for the item to download
 function get_cover_url(url)
 	local is_local = true;
 	if (is_local) then
@@ -315,6 +320,7 @@ function get_cover_url(url)
 	end
 end
 
+--@help Get percentage of currently playing item
 function get_percentage()
 	local resp = send("Player.GetProperties", { playerid = player(), properties = { "percentage" } });
 	
